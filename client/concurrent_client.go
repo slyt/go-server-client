@@ -51,14 +51,13 @@ func fetchData(url string, wg *sync.WaitGroup, results chan<- APIResponse) {
 	results <- APIResponse{Data: data}
 }
 
-func StartConcurrentClient() {
+func StartConcurrentClient(concurrency_count int) {
 	apiURL := "http://localhost:8080"
 
 	var wg sync.WaitGroup
 	results := make(chan APIResponse)
 
-	numberOfRequests := 16
-	for i := 0; i < numberOfRequests; i++ { // Spawn 10 go routines
+	for i := 0; i < concurrency_count; i++ { // Spawn 10 go routines
 		wg.Add(1)
 		go fetchData(apiURL, &wg, results)
 	}
